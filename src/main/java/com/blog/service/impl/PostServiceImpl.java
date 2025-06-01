@@ -80,7 +80,7 @@ public class PostServiceImpl implements PostService {
 		this.postRepo.delete(post);
 	}
 	
-	// will sort acc to the field that we will pass in place of 'sortBy' while calling api.
+	// will sort asc to the field that we will pass in place of 'sortBy' while calling api.
 	// 'sortDir' is for sorting in either ascending or descending order.
 	@Override
 	public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy,String sortDir) {
@@ -99,8 +99,8 @@ public class PostServiceImpl implements PostService {
 		// shortcut using ternary operator
 		Sort sort = (sortDir.equalsIgnoreCase("asc")?Sort.by(sortBy).ascending():Sort.by(sortBy).descending());
 		
-		Pageable p = PageRequest.of(pageNumber, pageSize, sort); // getting the peagable object
-		Page<Post> pagePost = this.postRepo.findAll(p); // is object se help se us page ka details nikal sakte h.
+		Pageable p = PageRequest.of(pageNumber, pageSize, sort); // getting the pageable object
+		Page<Post> pagePost = this.postRepo.findAll(p); // is object ke help se us page ka details nikal sakte h.
 		List<Post> allPosts = pagePost.getContent(); // to get all post on that page
 
 		List<PostDto> postDtos=new ArrayList<>();
@@ -115,7 +115,7 @@ public class PostServiceImpl implements PostService {
 		postResponse.setPageNumber(pagePost.getNumber());
 		postResponse.setPageSize(pagePost.getSize());
 		postResponse.setTotalPages(pagePost.getTotalPages());
-		postResponse.setTotalelements(pagePost.getTotalElements());
+		postResponse.setTotalElements(pagePost.getTotalElements());
 		postResponse.setLastPage(pagePost.isLast());
 		
 		return postResponse;
@@ -144,6 +144,7 @@ public class PostServiceImpl implements PostService {
 		return postDtos;
 	}
 
+	//getAllPostOfAUser
 	@Override
 	public List<PostDto> getPostsByUser(Integer userId) {
 		// first get the category from database
@@ -174,6 +175,8 @@ public class PostServiceImpl implements PostService {
 		return postDtos;
 	}
 
+
+
 	public PostDto postToDto(Post post){
 		return this.modelMapper.map(post, PostDto.class);
 	}
@@ -183,5 +186,6 @@ public class PostServiceImpl implements PostService {
 	}
 
 	//List<PostDto> postDtos = posts.stream().map((post)->this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+
 
 }

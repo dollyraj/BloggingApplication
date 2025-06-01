@@ -13,6 +13,9 @@ import com.blog.repositories.CommentRepo;
 import com.blog.repositories.PostRepo;
 import com.blog.service.CommentService;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public class CommentServiceImpl implements CommentService {
 	
@@ -49,6 +52,21 @@ public class CommentServiceImpl implements CommentService {
 				.orElseThrow(()-> new ResourceNotFoundException("Comment", "comment id",commentId));
 		this.commentRepo.delete(com);
 	}
+
+	@Override
+	public Set<CommentDto> getCommentsOfPost(Integer postId) {
+		Post post = this.postRepo.findById(postId)
+				.orElseThrow(()-> new ResourceNotFoundException("Post", "postId",postId));
+
+		Set<Comment> comments=post.getComments();
+		Set<CommentDto> commentDtos=new HashSet<>();
+		for(Comment c:comments){
+			commentDtos.add(commentToDto(c));
+		}
+
+		return commentDtos;
+	}
+
 
 	private Comment dtoToComment(CommentDto commentDto){
 		return this.modelMapper.map(commentDto,Comment.class);

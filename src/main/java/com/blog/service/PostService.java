@@ -2,6 +2,7 @@ package com.blog.service;
 
 import java.util.List;
 
+import com.blog.dto.CommentDto;
 import com.blog.dto.PostDto;
 import com.blog.dto.PostResponse;
 
@@ -30,5 +31,6 @@ public interface PostService {
 	
 	// search post
 	List<PostDto> searchPosts(String keyword);
+
 
 }

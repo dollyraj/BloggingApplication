@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.blog.dto.CommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -159,5 +160,6 @@ public class PostController {
 			response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 			StreamUtils.copy(resource, response.getOutputStream()); // kisko , kahan bhejna h.
 		}
+
 
 }

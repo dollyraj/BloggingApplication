@@ -23,5 +23,4 @@ public class PostDto {
 
 	private Date addedDate;
 
-	private List<CommentDto> comments;
 }
