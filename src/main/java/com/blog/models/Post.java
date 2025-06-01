@@ -40,8 +40,7 @@ public class Post {
 	private User user;         // post kis user ka h
 	
 	
-	// using 'mappedBy' taki jo foreign key bane wo sirf 'post' table me bane
-	// to avoid infinite loop.
+	// why do we use mappedBy
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private Set<Comment> comments = new HashSet<>();
 	
