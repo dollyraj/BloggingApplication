@@ -3,8 +3,12 @@ package com.blog.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.blog.config.AppConstants;
+import com.blog.models.Role;
+import com.blog.repositories.RoleRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.blog.models.User;
@@ -22,6 +26,13 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
+
+
+	@Autowired
+	private RoleRepo roleRepo;
 
 	@Override
 	public UserDto createUser(UserDto userDto) {
@@ -35,6 +46,8 @@ public class UserServiceImpl implements UserService {
 		
 		return this.userToDto(savedUser);   // return karte samay phir change kar denge
 	}
+
+
 
 	@Override
 	public UserDto updateUser(UserDto userDto, Integer userId) {
@@ -105,8 +118,34 @@ public class UserServiceImpl implements UserService {
 	public UserDto userToDto(User user)
 	{
 		UserDto userDto = this.modelMapper.map(user, UserDto.class);
+
 		return userDto;
 
+	}
+
+	// registering(creating) new user after spring security
+	// with 'roles' and encoded password.
+	@Override
+	public UserDto registerNewUser(UserDto userDto) {
+
+		User user = this.modelMapper.map(userDto, User.class);
+
+		// encode password
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+		//setting the roles to user
+		// nya user ko phle "USER" bnayenge
+		Role role=new Role();
+		role = this.roleRepo.findById(AppConstants.ADMIN).get();
+		user.getRoles().add(role);
+
+//		if(userDto.getRole().equals("ADMIN"))
+//			role = this.roleRepo.findById(AppConstants.ADMIN).get();
+//		user.getRoles().add(role);
+
+		User newUser = this.userRepo.save(user);
+
+		return this.modelMapper.map(newUser, UserDto.class);
 	}
 
 

@@ -37,6 +37,9 @@ public class UserDto {
 	@NotEmpty
 	private String about;
 
-	
-	
+//	@NotEmpty
+//	private String role;
+
+
+
 }
